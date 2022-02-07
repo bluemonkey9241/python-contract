@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Money supply</title>
+    <link rel="stylesheet" type="text/css" href="static/styles.css">
+</head>
+<body>
+    <form>
+        {% for parameter in numeric_parameters + numeric_list_parameters %}
+            <label>
+                <b>{{ parameter.html_name|safe }}</b>
+                <br/>
+                <input name="{{ parameter.name }}"> <i>{{ "%s%s" % (parameter.valid_values_description[0].upper(), parameter.valid_values_description[1:]) }}.</i>
+            </label>
+            <br/>
+            <br/>
+        {%  endfor %}
+        <input type="submit" value="Submit">
+    </form>
+    <hr>
+    {%  if not errors %}
+        Showing results for:
+        {% for parameter in numeric_parameters + numeric_list_parameters %}
+            <ul>
+                <li>{{ parameter.html_name|safe }} = {{ parameter.value }}</li>
+            </ul>
+        {% endfor %}
+        <h1>Figures returned by 'money_supply()' and converted to HTML + JS inside 'app.py'</h1>
+        {{ figures|safe }}
+        <h1>Static images generated inside 'money_supply()'</h1>
+        <h2>They are not really needed, they will be deleted</h2>
+        {% for image_name in image_names %}
+            <img src="{{ url_for('static', filename = image_name) }}" alt="{{ image_name }}" title="{{ image_name }}">
+        {% endfor %}
+    {%  else %}
+        {% for error in errors %}
+            <div class="error_message">{{ error|safe }}</div>
+            <br/>
+        {%  endfor %}
+    {%  endif %}
+
+</body>
+</html>
